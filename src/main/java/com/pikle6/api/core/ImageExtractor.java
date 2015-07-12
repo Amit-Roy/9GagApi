@@ -54,6 +54,8 @@ public class ImageExtractor
     }
 
     private static int[] getImageDimensions(String url){
+        if(url.contains("sa.gif"))
+            url = url.substring(0, url.indexOf("a.gif")) + ".jpg";
         int[] dim = new int[2];
         if(url.equals("NOT SAFE FOR WORK")){
             dim[0] = 0; dim[1] = 0;
