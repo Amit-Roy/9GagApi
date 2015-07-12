@@ -3,7 +3,16 @@ package com.pikle6.api.core;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import javax.imageio.stream.ImageInputStream;
+import java.awt.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -31,15 +40,50 @@ public class ImageExtractor
             Element imgTag = extractImgTagFromArticle(article);
             Element postContainer = extractPostContainerFromArticle(article);
             String url = extractUrlFromPostContainer(postContainer, imgTag);
+            int[] dim = getImageDimensions(url);
             images.add(new Image(
                     extractIdFromArticle(article),
                     url,
                     extractTitleFromImgTag(postContainer, imgTag),
-                    extractTypeFromUrl(url)
-                )
-            );
+                    extractTypeFromUrl(url),
+                    dim[0],
+                    dim[1]
+            ));
         }
         return new ImagePair(images);
+    }
+
+    private static int[] getImageDimensions(String url){
+        int[] dim = new int[2];
+        if(url.equals("NOT SAFE FOR WORK")){
+            dim[0] = 0; dim[1] = 0;
+            return dim;
+        }
+        else {
+            ImageInputStream in = null;
+            try {
+                in = ImageIO.createImageInputStream(new URL(url).openStream());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            final Iterator<ImageReader> readers = ImageIO.getImageReaders(in);
+            if (readers.hasNext()) {
+                ImageReader reader = readers.next();
+                try {
+                    reader.setInput(in);
+                    dim[0] = reader.getWidth(0);
+                    dim[1] = reader.getHeight(0);
+                    return dim;
+                } catch (IOException e) {
+                    dim[0] = 0; dim[1] = 0;
+                    return dim;
+                } finally {
+                    reader.dispose();
+                }
+            }
+            dim[0] = 0; dim[1] = 0;
+            return dim;
+        }
     }
 
     // level 1

@@ -14,5 +14,3 @@ endpoints
 * /image/nextSetParam - Get the next 10 Images : [Usage](http://107.170.184.51:9000/image/a4LYVY6,aYwLev2,aw7V5vx)
 
 > nextSetParam - identifier returned with each image query. Just send it from the previous result : Usage
-
-* /comment/id - Get Comments for image ID : [Usage](http://107.170.184.51:9000/comment/a4LYVY6)
