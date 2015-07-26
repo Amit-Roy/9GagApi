@@ -25,11 +25,18 @@ import java.util.List;
 public class ImageExtractor
 {
     private static String HOME_URL = "http://9gag.com/";
-    private static String PARAM_URL = HOME_URL + "?id=";
+    private static String PARAM_URL = "?id=";
 
     public static ImagePair getImages(String param)
     {
-        return extractImages(param == null?Fetch.getRawImageData(HOME_URL):Fetch.getRawImageData(PARAM_URL+param));
+        return extractImages(param.isEmpty()?Fetch.getRawImageData(HOME_URL):Fetch.getRawImageData(HOME_URL + PARAM_URL + param));
+    }
+
+    public static ImagePair getImages(String category, String param)
+    {
+        return extractImages(param.isEmpty()?
+                Fetch.getRawImageData(HOME_URL + category + "/"):Fetch.getRawImageData(HOME_URL + category + "/" + PARAM_URL+param)
+        );
     }
 
     private static ImagePair extractImages(Element rawImageData)
@@ -68,6 +75,7 @@ public class ImageExtractor
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            assert in != null;
             final Iterator<ImageReader> readers = ImageIO.getImageReaders(in);
             if (readers.hasNext()) {
                 ImageReader reader = readers.next();

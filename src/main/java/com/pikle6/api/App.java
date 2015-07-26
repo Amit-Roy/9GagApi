@@ -4,7 +4,6 @@ import com.pikle6.api.config.ApiConfiguration;
 import com.pikle6.api.resource.Cmnt;
 import com.pikle6.api.resource.Doc;
 import com.pikle6.api.resource.Img;
-import com.pikle6.api.resource.Img2;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
@@ -27,7 +26,6 @@ public class App extends Application<ApiConfiguration>
     public void run(ApiConfiguration configuration, Environment environment) {
         environment.jersey().register(new Doc());
         environment.jersey().register(new Img());
-        environment.jersey().register(new Img2());
         environment.jersey().register(new Cmnt());
     }
 }
